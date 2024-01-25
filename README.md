@@ -3,6 +3,11 @@
 ![xb_time_ruler.gif](./xb_time_ruler.gif)
 
 
+### 安装
+```
+flutter pub add xb_time_ruler
+```
+
 ### 使用
 ```
 import 'dart:async';
