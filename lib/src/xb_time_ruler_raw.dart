@@ -146,6 +146,12 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
     _rebuildScrollView();
   }
 
+  void updateAreas(List<XBTimeRulerArea> areas) {
+    _areas = areas;
+    _buildScrollController();
+    _rebuildScrollView();
+  }
+
   void updateProperties(
       {required List<int> levelSegments,
       required List<List<String>> levelTitles,
@@ -556,7 +562,6 @@ class XBTimeRulesPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate is XBTimeRulesPainter &&
-        oldDelegate.segments != segments;
+    return true;
   }
 }

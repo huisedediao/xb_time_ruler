@@ -17,6 +17,18 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 中心线的颜色
   final Color? centerLineColor;
 
+  /// 卡尺的背景颜色
+  final Color bgColor;
+
+  /// 第一级刻度的高度（之后每级递减）
+  final double topLevelMarkHeight;
+
+  /// 下级相对于上级的高度
+  final double markHeightFactor;
+
+  /// 刻度文字的大小
+  final double levelTitleFontSize;
+
   /// 颜色区域
   final List<XBTimeRulerArea>? areas;
 
@@ -57,6 +69,8 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.areas,
       this.onChanged,
       this.onFingersChange,
+      this.levelTitleFontSize = 10,
+      this.markHeightFactor = 0.6,
       this.onScrollEnd,
       this.height = 50,
       this.topLevelMarkGap = 60,
@@ -65,6 +79,8 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.initCropperEndPercent,
       this.cropperLeftImg,
       this.cropperRightImg,
+      this.topLevelMarkHeight = 10,
+      this.bgColor = Colors.black,
       super.key});
 
   @override
@@ -84,8 +100,14 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
   void initState() {
     super.initState();
     _rawTotalWidthLevel1 = _levelSegments1[0] * widget.topLevelMarkGap;
+    _areas = widget.areas ?? [];
 
     _generateCover();
+  }
+
+  void updateAreas(List<XBTimeRulerArea>? newValue) {
+    _areas = newValue ?? [];
+    _rulerKey.currentState?.updateAreas(_areas);
   }
 
   _generateCover() async {
@@ -134,7 +156,7 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     }
   }
 
-  List<XBTimeRulerArea> get _areas => widget.areas ?? [];
+  late List<XBTimeRulerArea> _areas;
 
   /// 1级缩放最小阈值
   final double _threshold0 = 0.75;
@@ -358,12 +380,13 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
           levelSegments: _levelSegments,
           levelTitles: _levelTitles,
           levelTitleColor: widget.levelTitleColor ?? Colors.white,
-          levelTitleFontSize: 10,
-          topLevelMarkHeight: 10,
+          levelTitleFontSize: widget.levelTitleFontSize,
+          topLevelMarkHeight: widget.topLevelMarkHeight,
           topLevelMarkGap: _topLevelMarkGap,
           centerLineColor: widget.centerLineColor ?? Colors.white,
           areas: _areas,
-          markHeightFactor: 0.6,
+          bgColor: widget.bgColor,
+          markHeightFactor: widget.markHeightFactor,
           onChanged: (value) {
             if (widget.onChanged != null) {
               widget.onChanged!(value);
