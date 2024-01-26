@@ -133,9 +133,11 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
     _offsetPercent = newValue;
 
     /// 因为滚动完成的回调是在NotificationListener中监听的，这里延迟一下避免滚动不生效
-    Future.delayed(Duration.zero, () {
-      _scrollController?.animateTo(_calculateOffset,
-          duration: const Duration(milliseconds: 300), curve: Curves.linear);
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController?.hasClients ?? false) {
+        _scrollController?.animateTo(_calculateOffset,
+            duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      }
     });
   }
 
@@ -236,6 +238,7 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
   _buildScrollController() {
     if (_scrollController != null) {
       _scrollController?.removeListener(_scrollListener);
+      _scrollController?.dispose();
     }
     _scrollController = ScrollController(
       initialScrollOffset: _calculateOffset,
