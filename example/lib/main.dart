@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
                   percent = value;
                   scrollIfNeed();
                 },
-                onFingersChange: (value) {
+                onFingersChanged: (value) {
                   fingers = value;
                   if (fingers != 0) {
                     delayTimer?.cancel();

@@ -36,7 +36,7 @@ class XBTimeRulerPlayback extends StatefulWidget {
   final ValueChanged<double>? onChanged;
 
   /// 触摸手指数量变化
-  final ValueChanged<int>? onFingersChange;
+  final ValueChanged<int>? onFingersChanged;
 
   /// 滚动结束回调
   final ValueChanged<double>? onScrollEnd;
@@ -68,7 +68,7 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.centerLineColor,
       this.areas,
       this.onChanged,
-      this.onFingersChange,
+      this.onFingersChanged,
       this.levelTitleFontSize = 10,
       this.markHeightFactor = 0.6,
       this.onScrollEnd,
@@ -247,8 +247,8 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
   _updateRuleScrollAble() {
     // print('Number of fingers: $_fingers');
     _rulerKey.currentState?.updatedScrollAble(_fingers < 2);
-    if (widget.onFingersChange != null) {
-      widget.onFingersChange!(_fingers);
+    if (widget.onFingersChanged != null) {
+      widget.onFingersChanged!(_fingers);
     }
   }
 
