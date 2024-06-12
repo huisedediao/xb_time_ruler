@@ -47,10 +47,10 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 是否需要裁剪器
   final bool needCropper;
 
-  /// Cropper start的起始百分比
+  /// Cropper start的百分比
   final double? initCropperStartPercent;
 
-  /// Cropper end的起始百分比
+  /// Cropper end的百分比
   final double? initCropperEndPercent;
 
   /// 裁剪器左侧的图标
