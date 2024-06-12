@@ -101,8 +101,10 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     super.initState();
     _rawTotalWidthLevel1 = _levelSegments1[0] * widget.topLevelMarkGap;
     _areas = widget.areas ?? [];
-
-    _generateCover();
+    _generateCover(
+        needCropper: widget.needCropper,
+        initCropperStartPercent: widget.initCropperStartPercent,
+        initCropperEndPercent: widget.initCropperEndPercent);
   }
 
   void updateAreas(List<XBTimeRulerArea>? newValue) {
@@ -110,8 +112,24 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     _rulerKey.currentState?.updateAreas(_areas);
   }
 
-  _generateCover() async {
-    if (widget.needCropper == false) return;
+  void updateCroper(
+      {required bool needCropper,
+      required double? initCropperStartPercent,
+      required double? initCropperEndPercent}) {
+    _generateCover(
+        needCropper: needCropper,
+        initCropperStartPercent: initCropperStartPercent,
+        initCropperEndPercent: initCropperEndPercent);
+  }
+
+  _generateCover(
+      {required bool needCropper,
+      required double? initCropperStartPercent,
+      required double? initCropperEndPercent}) async {
+    if (needCropper == false) {
+      _rulerKey.currentState?.updateCover(null);
+      return;
+    }
 
     ui.Image? leftImg;
     ui.Image? rightImg;
@@ -122,9 +140,8 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
       rightImg = await _generateUiImgFromAssetsPath(widget.cropperRightImg!);
     }
 
-    double? startPercent =
-        widget.initCropperStartPercent ?? widget.initOffsetPercent;
-    double? endPercent = widget.initCropperEndPercent;
+    double? startPercent = initCropperStartPercent ?? widget.initOffsetPercent;
+    double? endPercent = initCropperEndPercent;
     if (endPercent == null || endPercent < startPercent) {
       endPercent = startPercent < 0.9 ? startPercent + 0.1 : startPercent;
     }
