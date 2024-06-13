@@ -80,6 +80,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             XBTimeRulerPlayback(
                 needCropper: true,
+                // needAdaptCroper: true,
                 initCropperStartPercent: 0.15,
                 initCropperEndPercent: 0.22,
                 // coverLeftImg: "assets/images/arrow_left.png",

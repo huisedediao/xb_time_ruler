@@ -47,6 +47,9 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 是否需要裁剪器
   final bool needCropper;
 
+  /// 底部刻度是否需要为cropper
+  final bool needAdaptCroper;
+
   /// Cropper start的百分比
   final double? initCropperStartPercent;
 
@@ -75,6 +78,7 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.height = 50,
       this.topLevelMarkGap = 60,
       this.needCropper = false,
+      this.needAdaptCroper = false,
       this.initCropperStartPercent,
       this.initCropperEndPercent,
       this.cropperLeftImg,
@@ -127,7 +131,8 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
       required double? initCropperStartPercent,
       required double? initCropperEndPercent}) async {
     if (needCropper == false) {
-      _rulerKey.currentState?.updateCover(null);
+      _cropper = null;
+      _rulerKey.currentState?.updateCover(_cropper);
       return;
     }
 
@@ -369,6 +374,10 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
                       _cropper!.endOffsetPercent + changeScale);
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInCenterArea) {
+              if (_cropper!.startOffsetPercent + changeScale < 0 ||
+                  _cropper!.endOffsetPercent + changeScale > 1) {
+                return;
+              }
               _cropper = _cropper!.copy(
                   newStartOffsetPercent:
                       _cropper!.startOffsetPercent + changeScale,
@@ -413,6 +422,7 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
           height: widget.height,
           offsetPercent: widget.initOffsetPercent,
           cropper: _cropper,
+          needAdaptCroper: widget.needAdaptCroper,
         ),
       ),
     );

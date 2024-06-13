@@ -86,7 +86,7 @@ class XBTimeRulerCropper {
       {required this.startOffsetPercent,
       required this.endOffsetPercent,
       this.lineWidtV = 25,
-      this.lineWidthH = 5,
+      this.lineWidthH = 2,
       this.leftImg,
       this.color = Colors.red,
       this.defaultArrowColor = Colors.black,

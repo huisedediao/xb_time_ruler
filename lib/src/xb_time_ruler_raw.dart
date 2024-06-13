@@ -24,6 +24,9 @@ class XBTimeRulerRaw extends StatefulWidget {
   /// 覆盖的层，用于视频段落截取
   final XBTimeRulerCropper? cropper;
 
+  /// 底部刻度是否需要为cropper
+  final bool needAdaptCroper;
+
   /// -------------------------------以下不需要更新----------------------------------
 
   /// 改变刻度的回调，参数为当前偏移量百分比
@@ -81,6 +84,7 @@ class XBTimeRulerRaw extends StatefulWidget {
       this.markWidth = 1,
       this.centerLineColor = Colors.white,
       this.centerLineWidth = 1.0,
+      this.needAdaptCroper = false,
       super.key});
   @override
   State<XBTimeRulerRaw> createState() => XBTimeRulerRawState();
@@ -212,7 +216,8 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
                         segments: segments,
                         areas: _areas,
                         isSegmentInScreen: _isSegmentInScreen,
-                        cropper: _cropper)),
+                        cropper: _cropper,
+                        needAdaptCroper: widget.needAdaptCroper)),
               ),
             ),
           ),
@@ -366,16 +371,23 @@ class XBTimeRulesPainter extends CustomPainter {
   final Paint markPaint = Paint();
   final Paint areaPaint = Paint();
   final Paint textPaint = Paint();
+  final bool needAdaptCroper;
 
   XBTimeRulesPainter(
       {required this.segments,
       required this.areas,
       required this.isSegmentInScreen,
+      required this.needAdaptCroper,
       this.cropper});
 
   @override
   void paint(Canvas canvas, Size size) {
-    double coverBottom = cropper != null ? cropper!.lineWidthH : 0;
+    double coverBottom;
+    if (needAdaptCroper) {
+      coverBottom = cropper != null ? cropper!.lineWidthH : 0;
+    } else {
+      coverBottom = 0;
+    }
 
     for (int i = 0; i < segments.length; i++) {
       XBTimeRulerSegment segment = segments[i];
