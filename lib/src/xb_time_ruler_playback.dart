@@ -386,12 +386,18 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
                 _calculateDistanceScale(details.focalPointDelta.dx);
 
             if (_isInLeftArea) {
+              if (_cropper!.startOffsetPercent + changeScale < 0) {
+                return;
+              }
               _cropper = _cropper!.copy(
                   newStartOffsetPercent:
                       _cropper!.startOffsetPercent + changeScale);
               widget.onCropperChanged?.call();
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInRightArea) {
+              if (_cropper!.endOffsetPercent + changeScale > 1) {
+                return;
+              }
               _cropper = _cropper!.copy(
                   newEndOffsetPercent:
                       _cropper!.endOffsetPercent + changeScale);
