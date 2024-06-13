@@ -158,6 +158,11 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
     _rebuildScrollView();
   }
 
+  double currentPercent() {
+    _caculateOffsetPercent();
+    return _offsetPercent;
+  }
+
   void updateProperties(
       {required List<int> levelSegments,
       required List<List<String>> levelTitles,
@@ -256,10 +261,14 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
 
   _scrollListener() {
     if (_scrollController == null) return;
+    _caculateOffsetPercent();
+    widget.onChanged?.call(_offsetPercent);
+  }
+
+  _caculateOffsetPercent() {
     double maxScrollExtent = _scrollController!.position.maxScrollExtent;
     double currentScrollPosition = _scrollController!.offset;
     _offsetPercent = currentScrollPosition / maxScrollExtent;
-    widget.onChanged?.call(_offsetPercent);
   }
 
   _rebuildScrollView() {

@@ -35,6 +35,9 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 改变刻度的回调，参数为当前偏移量百分比
   final ValueChanged<double>? onChanged;
 
+  /// cropper范围改变的回调
+  final VoidCallback? onCropperChanged;
+
   /// 触摸手指数量变化
   final ValueChanged<int>? onFingersChanged;
 
@@ -71,6 +74,7 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.centerLineColor,
       this.areas,
       this.onChanged,
+      this.onCropperChanged,
       this.onFingersChanged,
       this.levelTitleFontSize = 10,
       this.markHeightFactor = 0.6,
@@ -114,6 +118,24 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
   void updateAreas(List<XBTimeRulerArea>? newValue) {
     _areas = newValue ?? [];
     _rulerKey.currentState?.updateAreas(_areas);
+  }
+
+  double get startPercent {
+    if (_cropper == null) {
+      return 0;
+    }
+    return _cropper!.startOffsetPercent;
+  }
+
+  double get endPercent {
+    if (_cropper == null) {
+      return 0;
+    }
+    return _cropper!.endOffsetPercent;
+  }
+
+  double get currentPercent {
+    return _rulerKey.currentState?.currentPercent() ?? 0;
   }
 
   void updateCroper(
@@ -367,11 +389,13 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               _cropper = _cropper!.copy(
                   newStartOffsetPercent:
                       _cropper!.startOffsetPercent + changeScale);
+              widget.onCropperChanged?.call();
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInRightArea) {
               _cropper = _cropper!.copy(
                   newEndOffsetPercent:
                       _cropper!.endOffsetPercent + changeScale);
+              widget.onCropperChanged?.call();
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInCenterArea) {
               if (_cropper!.startOffsetPercent + changeScale < 0 ||
@@ -383,6 +407,7 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
                       _cropper!.startOffsetPercent + changeScale,
                   newEndOffsetPercent:
                       _cropper!.endOffsetPercent + changeScale);
+              widget.onCropperChanged?.call();
               _rulerKey.currentState?.updateCover(_cropper);
             }
           } else {
