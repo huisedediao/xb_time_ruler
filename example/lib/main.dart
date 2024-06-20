@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             XBTimeRulerPlayback(
+                cropperMaxRangePercent: 0.1,
                 needCropper: true,
                 // needAdaptCroper: true,
                 initCropperStartPercent: 0.15,

@@ -53,6 +53,9 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 底部刻度是否需要为cropper
   final bool needAdaptCroper;
 
+  /// Cropper 最大的覆盖范围的，占总长度的百分比
+  final double? cropperMaxRangePercent;
+
   /// Cropper start的百分比
   final double? initCropperStartPercent;
 
@@ -84,12 +87,26 @@ class XBTimeRulerPlayback extends StatefulWidget {
       this.needCropper = false,
       this.needAdaptCroper = false,
       this.initCropperStartPercent,
+      this.cropperMaxRangePercent,
       this.initCropperEndPercent,
       this.cropperLeftImg,
       this.cropperRightImg,
       this.topLevelMarkHeight = 10,
       this.bgColor = Colors.black,
-      super.key});
+      super.key})
+      : assert(
+            cropperMaxRangePercent == null ||
+                (cropperMaxRangePercent >= 0 && cropperMaxRangePercent <= 1),
+            'cropperMaxRangePercent 不合法'),
+        assert(
+            cropperMaxRangePercent == null ||
+                (initCropperStartPercent == null &&
+                    initCropperEndPercent == null) ||
+                (initCropperStartPercent != null &&
+                    initCropperEndPercent != null &&
+                    initCropperEndPercent - initCropperStartPercent <=
+                        cropperMaxRangePercent),
+            "cropperMaxRangePercent、initCropperStartPercent、initCropperEndPercent 参数设置有误，请检查！");
 
   @override
   State<XBTimeRulerPlayback> createState() => XBTimeRulerPlaybackState();
@@ -389,6 +406,14 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               if (_cropper!.startOffsetPercent + changeScale < 0) {
                 return;
               }
+              if (changeScale < 0 &&
+                  widget.cropperMaxRangePercent != null &&
+                  (_cropper!.endOffsetPercent -
+                          _cropper!.startOffsetPercent +
+                          changeScale) >
+                      widget.cropperMaxRangePercent!) {
+                return;
+              }
               _cropper = _cropper!.copy(
                   newStartOffsetPercent:
                       _cropper!.startOffsetPercent + changeScale);
@@ -396,6 +421,14 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInRightArea) {
               if (_cropper!.endOffsetPercent + changeScale > 1) {
+                return;
+              }
+              if (changeScale > 0 &&
+                  widget.cropperMaxRangePercent != null &&
+                  (_cropper!.endOffsetPercent -
+                          _cropper!.startOffsetPercent +
+                          changeScale) >
+                      widget.cropperMaxRangePercent!) {
                 return;
               }
               _cropper = _cropper!.copy(
