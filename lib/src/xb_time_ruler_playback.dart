@@ -409,8 +409,7 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               if (changeScale < 0 &&
                   widget.cropperMaxRangePercent != null &&
                   (_cropper!.endOffsetPercent -
-                          _cropper!.startOffsetPercent +
-                          changeScale) >
+                          (_cropper!.startOffsetPercent + changeScale)) >=
                       widget.cropperMaxRangePercent!) {
                 return;
               }
@@ -425,9 +424,8 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               }
               if (changeScale > 0 &&
                   widget.cropperMaxRangePercent != null &&
-                  (_cropper!.endOffsetPercent -
-                          _cropper!.startOffsetPercent +
-                          changeScale) >
+                  ((_cropper!.endOffsetPercent + changeScale) -
+                          _cropper!.startOffsetPercent) >=
                       widget.cropperMaxRangePercent!) {
                 return;
               }
