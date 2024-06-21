@@ -399,19 +399,19 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
             // debugPrint("这是移动，${details.toString()}");
             if (_fingers > 1) return;
             if (_cropper == null) return;
-            final changeScale =
+            double changeScale =
                 _calculateDistanceScale(details.focalPointDelta.dx);
-
             if (_isInLeftArea) {
               if (_cropper!.startOffsetPercent + changeScale < 0) {
-                return;
-              }
-              if (changeScale < 0 &&
+                changeScale = -_cropper!.startOffsetPercent;
+              } else if (changeScale < 0 &&
                   widget.cropperMaxRangePercent != null &&
                   (_cropper!.endOffsetPercent -
-                          (_cropper!.startOffsetPercent + changeScale)) >=
+                          (_cropper!.startOffsetPercent + changeScale)) >
                       widget.cropperMaxRangePercent!) {
-                return;
+                changeScale = _cropper!.endOffsetPercent -
+                    _cropper!.startOffsetPercent -
+                    widget.cropperMaxRangePercent!;
               }
               _cropper = _cropper!.copy(
                   newStartOffsetPercent:
@@ -420,14 +420,15 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
               _rulerKey.currentState?.updateCover(_cropper);
             } else if (_isInRightArea) {
               if (_cropper!.endOffsetPercent + changeScale > 1) {
-                return;
-              }
-              if (changeScale > 0 &&
+                changeScale = 1 - _cropper!.endOffsetPercent;
+              } else if (changeScale > 0 &&
                   widget.cropperMaxRangePercent != null &&
                   ((_cropper!.endOffsetPercent + changeScale) -
-                          _cropper!.startOffsetPercent) >=
+                          _cropper!.startOffsetPercent) >
                       widget.cropperMaxRangePercent!) {
-                return;
+                changeScale = widget.cropperMaxRangePercent! +
+                    _cropper!.startOffsetPercent -
+                    _cropper!.endOffsetPercent;
               }
               _cropper = _cropper!.copy(
                   newEndOffsetPercent:
