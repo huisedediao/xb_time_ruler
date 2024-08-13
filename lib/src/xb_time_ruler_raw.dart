@@ -18,13 +18,16 @@ class XBTimeRulerRaw extends StatefulWidget {
   /// 偏移量百分比，用于在缩放时固定当前位置
   final double offsetPercent;
 
+  /// 最大的偏移百分比，用于限制滚动范围
+  final double maxOffsetPercent;
+
   /// 颜色区域
   final List<XBTimeRulerArea> areas;
 
   /// 覆盖的层，用于视频段落截取
   final XBTimeRulerCropper? cropper;
 
-  /// 底部刻度是否需要为cropper
+  /// 底部刻度是否需要为cropper留出底部空隙
   final bool needAdaptCroper;
 
   /// -------------------------------以下不需要更新----------------------------------
@@ -76,6 +79,7 @@ class XBTimeRulerRaw extends StatefulWidget {
       this.levelTitles,
       this.markHeightFactor = 0.5,
       this.offsetPercent = 0,
+      this.maxOffsetPercent = 1,
       this.onChanged,
       this.onScrollEnd,
       this.height = 50,
@@ -104,6 +108,8 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
 
   late double _offsetPercent;
 
+  late double _maxOffsetPercent;
+
   late List<XBTimeRulerArea> _areas;
 
   late XBTimeRulerCropper? _cropper;
@@ -118,10 +124,22 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
     _levelTitles = widget.levelTitles;
     _topLevelMarkGap = widget.topLevelMarkGap;
     _offsetPercent = widget.offsetPercent;
+    _maxOffsetPercent = widget.maxOffsetPercent;
     _areas = widget.areas;
     _cropper = widget.cropper;
 
     _buildScrollController();
+  }
+
+  void updateMaxOffsetPercent(double newValue) {
+    if (_maxOffsetPercent == newValue) return;
+    _maxOffsetPercent = newValue;
+    setState(() {
+      /// 如果当前偏移的百分比超过_maxOffsetPercent，则跳转到_maxOffsetPercent
+      if (_offsetPercent > _maxOffsetPercent) {
+        updatedOffsetPercent(_maxOffsetPercent);
+      }
+    });
   }
 
   double get offsetPercent => _offsetPercent;
@@ -133,7 +151,7 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
   }
 
   void updatedOffsetPercent(double newValue) {
-    if (_offsetPercent == newValue) return;
+    if (_offsetPercent == newValue || newValue > _maxOffsetPercent) return;
     _offsetPercent = newValue;
 
     /// 因为滚动完成的回调是在NotificationListener中监听的，这里延迟一下避免滚动不生效
@@ -262,6 +280,11 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
   _scrollListener() {
     if (_scrollController == null) return;
     _caculateOffsetPercent();
+    if (_offsetPercent > _maxOffsetPercent) {
+      _offsetPercent = _maxOffsetPercent;
+      _scrollController?.jumpTo(_calculateOffset);
+      return;
+    }
     widget.onChanged?.call(_offsetPercent);
   }
 

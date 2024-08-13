@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             XBTimeRulerPlayback(
+                maxOffsetPercent: 0.5,
                 cropperMaxRangePercent: 0.1,
                 needCropper: true,
                 // needAdaptCroper: true,
@@ -89,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                 key: _globalKey,
                 initOffsetPercent: 0.2,
                 onChanged: (value) {
-                  // print("百分比更新：$value");
+                  print("百分比更新：$value");
                   percent = value;
                 },
                 onScrollEnd: (value) {
@@ -112,9 +113,34 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   print(_globalKey.currentState?.coverPercentRange);
                 },
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("获取百分比"),
+                child: Container(
+                  color: Colors.purple,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("获取百分比"),
+                  ),
+                )),
+            GestureDetector(
+                onTap: () {
+                  _globalKey.currentState?.updateMaxOffsetPercent(0.8);
+                },
+                child: Container(
+                  color: Colors.green,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("更改最大偏移百分比为0.8"),
+                  ),
+                )),
+            GestureDetector(
+                onTap: () {
+                  _globalKey.currentState?.updateMaxOffsetPercent(0.6);
+                },
+                child: Container(
+                  color: Colors.red,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("更改最大偏移百分比为0.6"),
+                  ),
                 ))
           ],
         )),

@@ -11,6 +11,9 @@ class XBTimeRulerPlayback extends StatefulWidget {
   /// 初始情况下，偏移的百分比，范围 0 - 1
   final double initOffsetPercent;
 
+  /// 最大偏移量百分比
+  final double maxOffsetPercent;
+
   /// 文字的颜色
   final Color? levelTitleColor;
 
@@ -73,6 +76,7 @@ class XBTimeRulerPlayback extends StatefulWidget {
 
   const XBTimeRulerPlayback(
       {required this.initOffsetPercent,
+      this.maxOffsetPercent = 1,
       this.levelTitleColor,
       this.centerLineColor,
       this.areas,
@@ -318,6 +322,11 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     _rulerKey.currentState?.updatedOffsetPercent(newValue);
   }
 
+  /// 更新最大百分比
+  void updateMaxOffsetPercent(double newValue) {
+    _rulerKey.currentState?.updateMaxOffsetPercent(newValue);
+  }
+
   /// 获取cover覆盖的范围（百分比范围）
   List<double> get coverPercentRange {
     if (_cropper == null) {
@@ -484,6 +493,7 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
           onScrollEnd: widget.onScrollEnd,
           height: widget.height,
           offsetPercent: widget.initOffsetPercent,
+          maxOffsetPercent: widget.maxOffsetPercent,
           cropper: _cropper,
           needAdaptCroper: widget.needAdaptCroper,
         ),
