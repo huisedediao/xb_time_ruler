@@ -142,6 +142,8 @@ class XBTimeRulerRawState extends State<XBTimeRulerRaw> {
     });
   }
 
+  bool get isAtMaxOffset => _offsetPercent >= _maxOffsetPercent;
+
   double get offsetPercent => _offsetPercent;
 
   void updateCover(XBTimeRulerCropper? newValue) {

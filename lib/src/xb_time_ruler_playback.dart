@@ -327,6 +327,9 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     _rulerKey.currentState?.updateMaxOffsetPercent(newValue);
   }
 
+  /// 是否已经在最大的偏移位置
+  bool get isAtMaxOffset => _rulerKey.currentState?.isAtMaxOffset ?? false;
+
   /// 获取cover覆盖的范围（百分比范围）
   List<double> get coverPercentRange {
     if (_cropper == null) {
