@@ -282,24 +282,6 @@ class XBTimeRulerPlaybackState extends State<XBTimeRulerPlayback> {
     return ret;
   }
 
-  /// 2级缩的刻度文字
-  List<List<String>> get _levelTitles2 => [
-        List.generate(_levelSegments2[0], (index) {
-          int hourInt = index ~/ 6;
-          int minInt = index % 6 * 10;
-          return "${fixSmallerThanTen(hourInt)}:${fixSmallerThanTen(minInt)}";
-        })
-      ];
-
-  /// 3级缩的刻度文字
-  List<List<String>> get _levelTitles3 => [
-        List.generate(_levelSegments3[0], (index) {
-          int hourInt = index ~/ 30;
-          int minInt = index % 30 * 2;
-          return "${fixSmallerThanTen(hourInt)}:${fixSmallerThanTen(minInt)}";
-        })
-      ];
-
   /// 不足10的数字，前面补零
   String fixSmallerThanTen(int value) {
     if (value < 10) {

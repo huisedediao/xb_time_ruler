@@ -1,10 +1,10 @@
 name: xb_time_ruler
 description: 丝滑的卡尺时间选择器
-version: 0.0.17
+version: 0.0.18
 homepage: https://github.com/huisedediao/xb_time_ruler.git
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: '>=2.19.6 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
