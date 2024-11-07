@@ -423,6 +423,17 @@ class XBTimeRulesPainter extends CustomPainter {
       coverBottom = 0;
     }
 
+    // Draw the colored area
+    for (int i = 0; i < areas.length; i++) {
+      XBTimeRulerArea areaModel = areas[i];
+      areaPaint.color = areaModel.color;
+      double left = areaModel.startOffsetPercent * size.width;
+      double right = areaModel.endOffsetPercent * size.width;
+      double top = 0.0;
+      double bottom = size.height - coverBottom;
+      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom), areaPaint);
+    }
+
     for (int i = 0; i < segments.length; i++) {
       XBTimeRulerSegment segment = segments[i];
 
@@ -465,17 +476,6 @@ class XBTimeRulesPainter extends CustomPainter {
             size.height - segment.markHeight - tp.height - coverBottom);
         tp.paint(canvas, textOffset);
       }
-    }
-
-    // Draw the colored area
-    for (int i = 0; i < areas.length; i++) {
-      XBTimeRulerArea areaModel = areas[i];
-      areaPaint.color = areaModel.color;
-      double left = areaModel.startOffsetPercent * size.width;
-      double right = areaModel.endOffsetPercent * size.width;
-      double top = 0.0;
-      double bottom = size.height - coverBottom;
-      canvas.drawRect(Rect.fromLTRB(left, top, right, bottom), areaPaint);
     }
 
     // Draw the cover

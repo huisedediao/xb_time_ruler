@@ -1,6 +1,6 @@
 name: xb_time_ruler
 description: 丝滑的卡尺时间选择器
-version: 0.0.18
+version: 0.0.19
 homepage: https://github.com/huisedediao/xb_time_ruler.git
 
 environment:
